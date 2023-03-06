@@ -1,0 +1,47 @@
+[training@localhost ~]$ hive
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/training/hive_job_log_training_202302150553_49688648.txt
+hive> CREATE TABLE movies_part(movieid int, moviename string,releasedate string, imdb_url string)
+    > PARTITIONED BY (genre string)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+OK
+Time taken: 2.417 seconds
+hive> describe movies_part
+    > ;
+OK
+movieid int     
+moviename       string 
+releasedate     string 
+imdb_url        string 
+genre   string 
+Time taken: 0.161 seconds
+hive> LOAD DATA LOCAL INPATH 'hiveworkspace/action.txt' into table movies_part PARTITION(genre = 'action');
+Copying data from file:/home/training/hiveworkspace/action.txt
+Copying file: file:/home/training/hiveworkspace/action.txt
+Loading data to table default.movies_part partition (genre=action)
+OK
+hive> LOAD DATA LOCAL INPATH 'hiveworkspace/comedy.txt' into table movies_part PARTITION(genre = 'comedy')   
+    > ;
+Copying data from file:/home/training/hiveworkspace/comedy.txt
+Copying file: file:/home/training/hiveworkspace/comedy.txt
+Loading data to table default.movies_part partition (genre=comedy)
+OK
+Time taken: 0.243 seconds
+hive> LOAD DATA LOCAL INPATH 'hiveworkspace/thriller.txt' into table movies_part PARTITION(genre = 'thriller');
+Copying data from file:/home/training/hiveworkspace/thriller.txt
+Copying file: file:/home/training/hiveworkspace/thriller.txt
+Loading data to table default.movies_part partition (genre=thriller)
+OK
+hive> select * from movies_part where genre = 'comedy' limit 10;
+OK
+1       Toy Story (1995)        01-Jan-1995     http://us.imdb.com/M/title-exact?Toy%20Story%20(1995)   comedy
+4       Get Shorty (1995)       01-Jan-1995     http://us.imdb.com/M/title-exact?Get%20Shorty%20(1995)  comedy
+8       Babe (1995)     01-Jan-1995     http://us.imdb.com/M/title-exact?Babe%20(1995)  comedy
+13      Mighty Aphrodite (1995) 30-Oct-1995     http://us.imdb.com/M/title-exact?Mighty%20Aphrodite%20(1995)    comedy
+16      French Twist (Gazon maudit) (1995)      01-Jan-1995     http://us.imdb.com/M/title-exact?Gazon%20maudit%20(1995)        comedy
+17      From Dusk Till Dawn (1996)      05-Feb-1996     http://us.imdb.com/M/title-exact?From%20Dusk%20Till%20Dawn%20(1996)     comedy
+21      Muppet Treasure Island (1996)   16-Feb-1996     http://us.imdb.com/M/title-exact?Muppet%20Treasure%20Island%20(1996)comedy
+25      Birdcage\        The (1996)     08-Mar-1996     comedy
+26      Brothers McMullen\       The (1995)     01-Jan-1995     comedy
+29      Batman Forever (1995)   01-Jan-1995     http://us.imdb.com/M/title-exact?Batman%20Forever%20(1995)      comedy
+Time taken: 0.158 seconds
