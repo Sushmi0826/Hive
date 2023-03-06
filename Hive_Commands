@@ -1,0 +1,128 @@
+[training@localhost ~]$ hive
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/training/hive_job_log_training_202302140656_2141596835.txt
+
+HIVE TABLE CREATION:
+hive> CREATE TABLE User_Ratings
+    > (userid INT, movieid INT, ratings INT, unixtime BIGINT)ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '\t'
+    > STORED AS TEXTFILE;
+OK
+Time taken: 2.365 seconds
+
+LOAD DATA:
+hive> LOAD DATA INPATH 'hiveworks/u.data' INTO TABLE User_Ratings;
+Loading data to table default.user_ratings
+OK
+Time taken: 0.348 seconds
+
+VIEWING DATA:
+hive> select * from user_ratings limit 5;
+OK
+196     242     3       881250949
+186     302     3       891717742
+22      377     1       878887116
+244     51      2       880606923
+166     346     1       886397596
+Time taken: 0.309 seconds
+
+TABLE CREATION:
+hive> CREATE TABLE UserDemo
+    > (userid INT, age INT, gender STRING, occupation STRING, zipcode BIGINT)ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '|'
+    > STORED AS TEXTFILE;
+OK
+Time taken: 0.052 seconds
+
+LOAD DATA:
+hive> LOAD DATA INPATH 'hiveworks1/u.user' INTO TABLE UserDemo;
+Loading data to table default.userdemo
+OK
+Time taken: 0.142 seconds
+
+VIEWING DATA:
+hive> select * from UserDemo limit 5;
+OK
+1       24      M       technician      85711
+2       53      F       other   94043
+3       23      M       writer  32067
+4       24      M       technician      43537
+5       33      F       other   15213
+Time taken: 0.086 seconds
+
+hive> LOAD DATA LOCAL INPATH '/home/training/hiveworkspace/ml-data/u.user' INTO TABLE UserDemo;
+Copying data from file:/home/training/hiveworkspace/ml-data/u.user
+Copying file: file:/home/training/hiveworkspace/ml-data/u.user
+Loading data to table default.userdemo
+OK
+Time taken: 0.239 seconds
+
+MERGING 2 SIMILAR COLUMNS:
+hive> select * from User_Ratings join userDemo on User_Ratings.userid = UserDemo.userid limit 5;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapred.reduce.tasks=<number>
+Starting Job = job_202302140605_0001, Tracking URL = http://0.0.0.0:50030/jobdetails.jsp?jobid=job_202302140605_0001
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=0.0.0.0:8021 -kill job_202302140605_0001
+Hadoop job information for Stage-1: number of mappers: 2; number of reducers: 1
+2023-02-14 08:14:39,263 Stage-1 map = 0%,  reduce = 0%
+2023-02-14 08:14:43,359 Stage-1 map = 50%,  reduce = 0%, Cumulative CPU 1.36 sec
+2023-02-14 08:14:44,368 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.68 sec
+2023-02-14 08:14:45,374 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.68 sec
+2023-02-14 08:14:46,380 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.68 sec
+2023-02-14 08:14:47,428 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.85 sec
+2023-02-14 08:14:48,439 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 6.85 sec
+2023-02-14 08:14:49,459 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 6.85 sec
+MapReduce Total cumulative CPU time: 6 seconds 850 msec
+Ended Job = job_202302140605_0001
+MapReduce Jobs Launched:
+Job 0: Map: 2  Reduce: 1   Cumulative CPU: 6.85 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 6 seconds 850 msec
+OK
+1       270     5       888732827       1       24      M       technician      85711
+1       270     5       888732827       1       24      M       technician      85711
+1       133     4       876892818       1       24      M       technician      85711
+1       133     4       876892818       1       24      M       technician      85711
+1       29      1       878542869       1       24      M       technician      85711
+Time taken: 15.589 seconds
+
+EXTERNAL TABLE CREATION
+hive> create external table genre1(genre string, id int)
+    > row format delimited
+    > fields terminated by '|'
+    > stored as textfile
+    > location '/hiveworks';
+OK
+Time taken: 0.073 seconds
+hive> drop table genre1;
+OK
+Time taken: 0.092 seconds
+
+LISTING THE TABLES:
+hive> show tables;
+OK
+user_ratings
+userdemo
+userratings
+Time taken: 1.963 seconds
+
+DROPPING TABLE:
+hive> drop table userratings;
+OK
+Time taken: 0.725 seconds
+
+hive> show tables;
+OK
+user_ratings
+userdemo
+Time taken: 0.099 seconds
+hive> drop table UserDemo;
+OK
+Time taken: 0.142 seconds
+hive>
