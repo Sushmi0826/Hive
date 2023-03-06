@@ -1,0 +1,63 @@
+hive> CREATE TABLE rating_buckets (userid int, movieid int, rating int, unixtime bigint)
+    > CLUSTERED BY (movieid) INTO 8 BUCKETS;
+OK
+Time taken: 0.107 seconds
+hive> SET hive.enforce.bucketing = true;
+hive> INSERT OVERWRITE TABLE rating_buckets select * from user_ratings cluster by movieid;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 8
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapred.reduce.tasks=<number>
+Starting Job = job_202302150548_0003, Tracking URL = http://0.0.0.0:50030/jobdetails.jsp?jobid=job_202302150548_0003
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=0.0.0.0:8021 -kill job_202302150548_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 8
+2023-02-15 08:08:15,529 Stage-1 map = 0%,  reduce = 0%
+2023-02-15 08:08:17,538 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.72 sec
+2023-02-15 08:08:18,543 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.72 sec
+2023-02-15 08:08:19,549 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.72 sec
+2023-02-15 08:08:20,554 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.72 sec
+2023-02-15 08:08:21,563 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.72 sec
+2023-02-15 08:08:22,572 Stage-1 map = 100%,  reduce = 25%, Cumulative CPU 5.72 sec
+2023-02-15 08:08:23,581 Stage-1 map = 100%,  reduce = 25%, Cumulative CPU 5.72 sec
+2023-02-15 08:08:24,587 Stage-1 map = 100%,  reduce = 25%, Cumulative CPU 5.72 sec
+2023-02-15 08:08:25,593 Stage-1 map = 100%,  reduce = 25%, Cumulative CPU 5.72 sec
+2023-02-15 08:08:26,598 Stage-1 map = 100%,  reduce = 25%, Cumulative CPU 5.72 sec
+2023-02-15 08:08:27,604 Stage-1 map = 100%,  reduce = 38%, Cumulative CPU 7.72 sec
+2023-02-15 08:08:28,609 Stage-1 map = 100%,  reduce = 50%, Cumulative CPU 9.78 sec
+2023-02-15 08:08:29,615 Stage-1 map = 100%,  reduce = 50%, Cumulative CPU 9.78 sec
+2023-02-15 08:08:30,620 Stage-1 map = 100%,  reduce = 50%, Cumulative CPU 9.78 sec
+2023-02-15 08:08:31,626 Stage-1 map = 100%,  reduce = 50%, Cumulative CPU 9.78 sec
+2023-02-15 08:08:32,640 Stage-1 map = 100%,  reduce = 63%, Cumulative CPU 11.87 sec
+2023-02-15 08:08:33,655 Stage-1 map = 100%,  reduce = 75%, Cumulative CPU 13.87 sec
+2023-02-15 08:08:34,663 Stage-1 map = 100%,  reduce = 75%, Cumulative CPU 13.87 sec
+2023-02-15 08:08:35,669 Stage-1 map = 100%,  reduce = 75%, Cumulative CPU 13.87 sec
+2023-02-15 08:08:36,676 Stage-1 map = 100%,  reduce = 88%, Cumulative CPU 15.8 sec
+2023-02-15 08:08:37,682 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 17.88 sec
+2023-02-15 08:08:38,688 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 17.88 sec
+2023-02-15 08:08:39,701 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 17.88 sec
+MapReduce Total cumulative CPU time: 17 seconds 880 msec
+Ended Job = job_202302150548_0003
+Loading data to table default.rating_buckets
+rmr: DEPRECATED: Please use 'rm -r' instead.
+Deleted /user/hive/warehouse/rating_buckets
+100000 Rows loaded to rating_buckets
+MapReduce Jobs Launched:
+Job 0: Map: 1  Reduce: 8   Cumulative CPU: 17.88 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 17 seconds 880 msec
+OK
+Time taken: 27.78 seconds
+[training@localhost ml-data]$ hadoop fs -ls /user/hive/warehouse/rating_buckets
+Found 8 items
+-rw-r--r--   1 training supergroup     229924 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000000_0
+-rw-r--r--   1 training supergroup     250253 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000001_0
+-rw-r--r--   1 training supergroup     247620 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000002_0
+-rw-r--r--   1 training supergroup     240129 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000003_0
+-rw-r--r--   1 training supergroup     266397 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000004_0
+-rw-r--r--   1 training supergroup     232873 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000005_0
+-rw-r--r--   1 training supergroup     242315 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000006_0
+-rw-r--r--   1 training supergroup     269662 2023-02-15 08:08 /user/hive/warehouse/rating_buckets/000007_0
