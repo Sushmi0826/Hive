@@ -125,4 +125,6 @@ Time taken: 0.099 seconds
 hive> drop table UserDemo;
 OK
 Time taken: 0.142 seconds
-hive>
+
+FETCHING FROM 2 TABLES:
+hive> create table user_id as select user_ratings.userid, movieid, age from user_ratings join userdemo on (user_ratings.userid = userdemo.userid);
